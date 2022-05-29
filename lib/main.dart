@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:notes/auth/sign_up.dart';
 
+import 'auth/auth_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:SignUp() /*const MyHomePage(title: 'Flutter Demo Home Page')*/,
+      home:AuthScreen() /*const MyHomePage(title: 'Flutter Demo Home Page')*/,
     );
   }
 }
