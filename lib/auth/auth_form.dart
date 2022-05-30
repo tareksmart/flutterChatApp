@@ -39,6 +39,8 @@ class _AuthFormState extends State<AuthForm> {
               key: _formKey,
               child: Column(
                 children: [
+                  Image.asset('images/logo.png'),
+                  SizedBox(height: 20,),
                   if (!_islogin)
                     TextFormField(
                       key: const ValueKey('email'),
@@ -72,13 +74,13 @@ class _AuthFormState extends State<AuthForm> {
                     decoration: InputDecoration(labelText: 'password'),
                     obscureText: true,
                   ),
-                  SizedBox(
+                 const SizedBox(
                     height: 12,
                   ),
-                  OutlinedButton(
+                  ElevatedButton(
                       onPressed: _submit,
                       child: Text(_islogin ? 'login' : 'signup')),
-                      FlatButton(onPressed: (() {
+                      TextButton(onPressed: (() {
                        setState(() {
                          _islogin=!_islogin;
                        });

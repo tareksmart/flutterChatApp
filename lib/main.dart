@@ -19,11 +19,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        backgroundColor: Colors.purple,
+        accentColor: Colors.purple,
+        buttonTheme: ButtonTheme.of(context).copyWith(
+            buttonColor: Colors.pink,
+            textTheme: ButtonTextTheme.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            )),
       ),
-      home:AuthScreen() /*const MyHomePage(title: 'Flutter Demo Home Page')*/,
+      home: AuthScreen() /*const MyHomePage(title: 'Flutter Demo Home Page')*/,
     );
   }
 }
