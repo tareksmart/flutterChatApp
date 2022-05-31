@@ -4,8 +4,10 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class AuthForm extends StatefulWidget {
-  const AuthForm({Key? key}) : super(key: key);
+  final void Function(String email, String userName, String password,
+      bool islogin, BuildContext ctx) submitFn;
 
+  AuthForm(this.submitFn);
   @override
   State<AuthForm> createState() => _AuthFormState();
 }
@@ -19,9 +21,12 @@ class _AuthFormState extends State<AuthForm> {
 
   void _submit() {
     final _isValid = _formKey.currentState?.validate();
-    FocusScope.of(context).unfocus(); // واغلاق الكيبورد جعل الفورمة كانها فى سكرول
+    FocusScope.of(context)
+        .unfocus(); // واغلاق الكيبورد جعل الفورمة كانها فى سكرول
     if (_isValid!) {
       _formKey.currentState?.save();
+     
+      widget.submitFn(_email,_userName,_password,_islogin,context);
       print(_email);
       print(_userName);
       print(_password);
@@ -31,7 +36,8 @@ class _AuthFormState extends State<AuthForm> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Card(elevation: 8,
+      child: Card(
+        elevation: 8,
         margin: EdgeInsets.all(16),
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16),
@@ -40,7 +46,9 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 children: [
                   Image.asset('images/logo.png'),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   if (!_islogin)
                     TextFormField(
                       key: const ValueKey('email'),
@@ -74,17 +82,21 @@ class _AuthFormState extends State<AuthForm> {
                     decoration: InputDecoration(labelText: 'password'),
                     obscureText: true,
                   ),
-                 const SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
-                  ElevatedButton(
+                  ElevatedButton(key: ValueKey('logSignButton'),
                       onPressed: _submit,
                       child: Text(_islogin ? 'login' : 'signup')),
-                      TextButton(onPressed: (() {
-                       setState(() {
-                         _islogin=!_islogin;
-                       });
-                      }), child: Text(_islogin?'create new account':'i already have account'))
+                  TextButton(key: ValueKey('newAcc'),
+                      onPressed: (() {
+                        setState(() {
+                          _islogin = !_islogin;
+                        });
+                      }),
+                      child: Text(_islogin
+                          ? 'create new account'
+                          : 'i already have account'))
                 ],
               )),
         ),
