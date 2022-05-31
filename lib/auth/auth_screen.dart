@@ -23,23 +23,31 @@ class _AuthScreenState extends State<AuthScreen> {
         );
       } else {
         credential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: email, password: password);
+            .signInWithEmailAndPassword(email: userName, password: password);
       }
     } on FirebaseAuthException catch (e) {
-      String message='error occure';
+      String message = 'error occure';
       if (e.code == 'weak-password') {
-        message='The password provided is too weak.';
+        message = 'The password provided is too weak.';
       } else if (e.code == 'email-already-in-use') {
-        message='The account already exists for that email.';
+        message = 'The account already exists for that email.';
       } else if (e.code == 'user-not-found') {
-        message='No user found for that email.';
+        message = 'No user found for that email.';
       } else if (e.code == 'wrong-password') {
-        message='Wrong password provided for that user.';
+        message = 'Wrong password provided for that user.';
       }
+      Scaffold.of(ctx).showBottomSheet((context) {
+return Text(
+        message
+        );
+      });
+      // Scaffold.of(ctx).showSnackBar(SnackBar(
+      //   content: Text(message),
+      //   backgroundColor: Theme.of(ctx).errorColor,
+      // ));
     } catch (e) {
       print(e);
     }
-    Scaffold.of(ctx).showBottomSheet((context) => null)
   }
 
   @override
