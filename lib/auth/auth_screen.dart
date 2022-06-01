@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -13,14 +14,23 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   late UserCredential credential;
+  bool _isLoading=false;
   void _submitAuthForm(String email, String userName, String password,
       bool islogin, BuildContext ctx) async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       if (!islogin) {
         credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(credential.user!.uid)
+            .set({'userName': userName, 'password': password});
       } else {
         credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: userName, password: password);
@@ -37,23 +47,27 @@ class _AuthScreenState extends State<AuthScreen> {
         message = 'Wrong password provided for that user.';
       }
       Scaffold.of(ctx).showBottomSheet((context) {
-return Text(
-        message
-        );
+        return Text(message);
       });
       // Scaffold.of(ctx).showSnackBar(SnackBar(
       //   content: Text(message),
       //   backgroundColor: Theme.of(ctx).errorColor,
       // ));
+      setState(() {
+        _isLoading = false;
+      });
     } catch (e) {
       print(e);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AuthForm(_submitAuthForm),
+      body: AuthForm(_submitAuthForm,_isLoading),
     );
   }
 }

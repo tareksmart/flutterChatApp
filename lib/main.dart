@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter chat',
+      
       theme: ThemeData(
         primarySwatch: Colors.blue,
         backgroundColor: Colors.purple,
@@ -32,7 +34,15 @@ class MyApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             )),
       ),
-      home: AuthScreen() /*const MyHomePage(title: 'Flutter Demo Home Page')*/,
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              print('starttttttttt'+snapshot.data.toString()+'datttttttta');
+              return SignUp();
+            } else
+              return AuthScreen();
+          }), /*const MyHomePage(title: 'Flutter Demo Home Page')*/
     );
   }
 }
