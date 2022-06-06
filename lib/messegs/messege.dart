@@ -11,7 +11,7 @@ class Messege extends StatelessWidget {
   Widget build(BuildContext context) {
     return  StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('chat')
+              .collection('chat').orderBy('createdAt',descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -19,7 +19,7 @@ class Messege extends StatelessWidget {
             }
             final doc = snapshot.data?.docs;
 
-            return ListView.builder(
+            return ListView.builder(reverse: true,
                 itemCount: doc?.length,
                 itemBuilder: (ctx, index) => Container(
                       child: Text(doc![index]['text']),

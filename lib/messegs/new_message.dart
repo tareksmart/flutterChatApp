@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -10,15 +13,38 @@ class NewMessage extends StatefulWidget {
 }
 
 class _NewMessageState extends State<NewMessage> {
- final _controller=TextEditingController();
+  final _controller = TextEditingController();
+  String _enteredMessege = "";
+  _sendMessege() {
+    FocusScope.of(context).unfocus();
+    FirebaseFirestore.instance
+        .collection('chat')
+        .add({'text': _enteredMessege,'createdAt':Timestamp.now()});
+    _controller.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(8),
-      child: Row(children: [
-        Expanded(child: child)
-      ],),
-    )
+      padding: EdgeInsets.all(15),
+      child: Row(
+        children: [
+          Expanded(
+              child: TextField(
+            controller: _controller,
+            decoration: InputDecoration(labelText: 'enter send messege'),
+            onChanged: (val) {
+              setState(() {
+                _enteredMessege = val;
+              });
+            },
+          )),
+          IconButton(color: Theme.of(context).primaryColor,
+              onPressed: _enteredMessege.trim().isEmpty ? null : _sendMessege,
+              icon: Icon(Icons.send))
+        ],
+      ),
+    );
   }
 }

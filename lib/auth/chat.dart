@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:notes/messegs/new_message.dart';
 
 import '../messegs/messege.dart';
 
@@ -44,16 +45,14 @@ class _SignUpState extends State<SignUp> {
               })
         ],
       ),
-      body:Container(child: Column(children: [
-        Expanded(child: Messege())
-      ],),),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            FirebaseFirestore.instance
-                .collection('chat/pZBBNWpqQtPaiXH5fXsx/messages')
-                .add({'text': 'hello from smart'});
-          }),
+      body: Container(margin: EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Expanded(child: Messege())
+            , NewMessage()
+            ],
+        ),
+      ),
     );
   }
 }
