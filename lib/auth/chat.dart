@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../messegs/messege.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -42,22 +44,9 @@ class _SignUpState extends State<SignUp> {
               })
         ],
       ),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('chat/pZBBNWpqQtPaiXH5fXsx/messages')
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            }
-            final doc = snapshot.data?.docs;
-
-            return ListView.builder(
-                itemCount: doc?.length,
-                itemBuilder: (ctx, index) => Container(
-                      child: Text(doc![index]['text']),
-                    ));
-          }),
+      body:Container(child: Column(children: [
+        Expanded(child: Messege())
+      ],),),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
