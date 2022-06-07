@@ -3,6 +3,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/messegs/message_bubble.dart';
 
 class Messege extends StatelessWidget {
   const Messege({Key? key}) : super(key: key);
@@ -21,8 +22,8 @@ class Messege extends StatelessWidget {
 
             return ListView.builder(reverse: true,
                 itemCount: doc?.length,
-                itemBuilder: (ctx, index) => Container(
-                      child: Text(doc![index]['text']),
+                itemBuilder: (ctx, index) => MessageBubble(
+                      doc![index]['text'],'tarek',false,key: ValueKey('mid'),
                     ));
           });
   }
