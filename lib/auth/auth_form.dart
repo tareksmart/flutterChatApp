@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:notes/auth/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   bool _isloading = false;
@@ -42,12 +43,14 @@ class _AuthFormState extends State<AuthForm> {
           child: Form(
               key: _formKey,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset('images/logo.png'),
+                  /*Image.asset('images/logo.png'),
                   SizedBox(
                     height: 20,
-                  ),
+                  ),*/
                   if (!_islogin)
+                    UserImagePicker(),
                     TextFormField(
                       key: const ValueKey('email'),
                       validator: ((value) {
