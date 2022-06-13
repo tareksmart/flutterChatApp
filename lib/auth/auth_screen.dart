@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -14,9 +17,9 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   late UserCredential credential;
-  bool _isLoading=false;
+  bool _isLoading = false;
   void _submitAuthForm(String email, String userName, String password,
-      bool islogin, BuildContext ctx) async {
+      File image, bool islogin, BuildContext ctx) async {
     try {
       setState(() {
         _isLoading = true;
@@ -26,11 +29,18 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('user_image')
+            .child(credential.user!.uid + ',jpg');
+       await ref.putFile(image);
+       final url=await ref.getDownloadURL();
 
         await FirebaseFirestore.instance
             .collection('users')
             .doc(credential.user!.uid)
-            .set({'userName': userName, 'password': password});
+            .set({'userName': userName, 'password': password,
+        'user_url':url});
       } else {
         credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: userName, password: password);
@@ -67,7 +77,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AuthForm(_submitAuthForm,_isLoading),
+      body: AuthForm(_submitAuthForm, _isLoading),
     );
   }
 }
