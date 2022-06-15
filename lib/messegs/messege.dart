@@ -25,6 +25,7 @@ class Messege extends StatelessWidget {
               itemBuilder: (ctx, index) => MessageBubble(
                     doc![index]['text'],
                 doc[index]['userName'],
+                 doc[index]['userImage'],
                 doc[index]['userId']==FirebaseAuth.instance.currentUser?.uid,
                     key: ValueKey(doc[index].id),
                   ));

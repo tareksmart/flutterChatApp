@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter chat',
       
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        canvasColor: Colors.blue,
+        primarySwatch: Colors.amber,
         backgroundColor: Colors.purple,
         accentColor: Colors.purple,
         buttonTheme: ButtonTheme.of(context).copyWith(

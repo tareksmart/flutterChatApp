@@ -8,8 +8,8 @@ import 'package:notes/auth/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   bool _isloading = false;
-  final void Function(String email, String userName, String password,File image,
-      bool islogin, BuildContext ctx) submitFn;
+  final void Function(String email, String userName, String password,
+      File image, bool islogin, BuildContext ctx) submitFn;
 
   AuthForm(this.submitFn, this._isloading);
   @override
@@ -32,7 +32,7 @@ class _AuthFormState extends State<AuthForm> {
     final _isValid = _formKey.currentState?.validate();
     FocusScope.of(context)
         .unfocus(); // واغلاق الكيبورد جعل الفورمة كانها فى سكرول
-    if (_userImageFile == null) {
+    if (_userImageFile == null && _islogin) {
       Scaffold.of(context).showBottomSheet((context) => Text('no image picked'),
           backgroundColor: Theme.of(context).errorColor);
       print('no image');
@@ -41,7 +41,8 @@ class _AuthFormState extends State<AuthForm> {
     if (_isValid!) {
       _formKey.currentState?.save();
 
-      widget.submitFn(_email, _userName, _password,_userImageFile, _islogin, context);
+      widget.submitFn(
+          _email, _userName, _password, _userImageFile, _islogin, context);
     }
   }
 
@@ -62,21 +63,24 @@ class _AuthFormState extends State<AuthForm> {
                   SizedBox(
                     height: 20,
                   ),*/
-                  if (!_islogin)
+                   !_islogin?
                     UserImagePicker(
-                      imagePickFn: _pickedImage,
-                    ), //عرفت دالة بيك اميج ومررتها فى ودجت اخدت الصورة اللى جايه من يوزر ايمج بيكر خزنتها فى يوزر اميج فايل
-                  TextFormField(
-                    key: const ValueKey('email'),
-                    validator: ((value) {
-                      if (value!.isEmpty || !value.contains('@')) {
-                        return 'please enter valid email';
-                      }
-                    }),
-                    onSaved: (value) => _email = value!,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(labelText: 'email address'),
-                  ),
+                        imagePickFn: _pickedImage,
+                      ):Image.asset('images/logo.png')
+                     
+                    ,
+                  if (!_islogin) //عرفت دالة بيك اميج ومررتها فى ودجت اخدت الصورة اللى جايه من يوزر ايمج بيكر خزنتها فى يوزر اميج فايل
+                    TextFormField(
+                      key: const ValueKey('email'),
+                      validator: ((value) {
+                        if (value!.isEmpty || !value.contains('@')) {
+                          return 'please enter valid email';
+                        }
+                      }),
+                      onSaved: (value) => _email = value!,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(labelText: 'email address'),
+                    ),
                   TextFormField(
                     key: const ValueKey('username'),
                     validator: (val) {
@@ -99,7 +103,6 @@ class _AuthFormState extends State<AuthForm> {
                     obscureText: true,
                   ),
                   if (widget._isloading) CircularProgressIndicator(),
-
                   const SizedBox(
                     height: 12,
                   ),

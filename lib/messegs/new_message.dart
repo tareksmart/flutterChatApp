@@ -18,14 +18,24 @@ class _NewMessageState extends State<NewMessage> {
   String _enteredMessege = "";
   _sendMessege() async {
     FocusScope.of(context).unfocus();
-    final user=await FirebaseAuth.instance.currentUser;
-    final userData=await FirebaseFirestore.instance.collection('users').doc(user?.uid).get();
-    FirebaseFirestore.instance
-        .collection('chat')
-        .add({'text': _enteredMessege, 'createdAt': Timestamp.now(),
-    'userName':userData['userName'],
-    'userId':user?.uid});
+    final user = await FirebaseAuth.instance.currentUser;
+    final userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+    FirebaseFirestore.instance.collection('chat').add({
+      'text': _enteredMessege,
+      'createdAt': Timestamp.now(),
+      'userName': userData['userName'],
+      'userImage': userData['user_url'],
+      'userId': user?.uid
+    });
+    //هنا تمسح محتوى الرسالة فيلد لكن محتوى الرسالة موجود
     _controller.clear();
+    //لتفريغ محتوى الرسالة
+    setState(() {
+      _enteredMessege = "";
+    });
   }
 
   @override
@@ -37,8 +47,15 @@ class _NewMessageState extends State<NewMessage> {
         children: [
           Expanded(
               child: TextField(
+            autocorrect: true,
+            textCapitalization: TextCapitalization.sentences,
+            enableSuggestions: true,
             controller: _controller,
-            decoration: InputDecoration(labelText: 'enter send messege'),
+            decoration: InputDecoration(
+                labelText: 'enter send messege',
+                enabledBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Theme.of(context).primaryColor))),
             onChanged: (val) {
               setState(() {
                 _enteredMessege = val;
@@ -47,6 +64,7 @@ class _NewMessageState extends State<NewMessage> {
           )),
           IconButton(
               color: Theme.of(context).primaryColor,
+              disabledColor: Colors.grey,
               onPressed: _enteredMessege.trim().isEmpty ? null : _sendMessege,
               icon: Icon(Icons.send))
         ],

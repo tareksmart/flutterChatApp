@@ -32,7 +32,7 @@ class _AuthScreenState extends State<AuthScreen> {
         final ref = FirebaseStorage.instance
             .ref()
             .child('user_image')
-            .child(credential.user!.uid + ',jpg');
+            .child(credential.user!.uid + '.jpg');
        await ref.putFile(image);
        final url=await ref.getDownloadURL();
 
@@ -46,7 +46,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .signInWithEmailAndPassword(email: userName, password: password);
       }
     } on FirebaseAuthException catch (e) {
-      String message = 'error occure';
+      String message = 'error occure'+e.message.toString();
       if (e.code == 'weak-password') {
         message = 'The password provided is too weak.';
       } else if (e.code == 'email-already-in-use') {

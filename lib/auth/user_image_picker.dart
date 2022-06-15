@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserImagePicker extends StatefulWidget {
-
-
   final void Function(File image) imagePickFn;
 
-   UserImagePicker({Key? key,required this.imagePickFn});
+  UserImagePicker({Key? key, required this.imagePickFn});
 
   @override
   _UserImagePickerState createState() => _UserImagePickerState();
@@ -22,16 +20,17 @@ class _UserImagePickerState extends State<UserImagePicker> {
     print('late.............');
   }
 
-  late File _pickedImage = new File('path');
+   File? _pickedImage;
 
   final ImagePicker _picker = ImagePicker();
   void _pickImage(ImageSource src) async {
-    final pickedImageFile = await _picker.getImage(source: src,imageQuality: 50);
+    final pickedImageFile =
+        await _picker.getImage(source: src, imageQuality: 50);
     if (pickedImageFile != null) {
       setState(() {
         _pickedImage = File(pickedImageFile.path);
       });
-      widget.imagePickFn(_pickedImage);
+      widget.imagePickFn(_pickedImage!);
     } else
       print('no image picked');
   }
@@ -44,7 +43,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
           radius: 100,
           backgroundColor: Colors.grey,
           backgroundImage:
-              _pickedImage != null ? FileImage(_pickedImage) : null,
+              _pickedImage != null ? FileImage(_pickedImage!) : null,
         ),
         SizedBox(
           height: 10,
